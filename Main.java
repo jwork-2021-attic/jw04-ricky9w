@@ -5,9 +5,9 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-import com.anish.calabashbros.World;
-import com.anish.screen.Screen;
-import com.anish.screen.WorldScreen;
+import com.ricky.goblins.World;
+import com.ricky.screen.Screen;
+import com.ricky.screen.WorldScreen;
 
 import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;

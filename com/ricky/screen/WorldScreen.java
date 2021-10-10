@@ -3,8 +3,11 @@ package com.ricky.screen;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import java.util.Random;
+
 import com.ricky.goblins.BubbleSorter;
 import com.ricky.goblins.Goblin;
+import com.ricky.goblins.SelectSorter;
 import com.ricky.goblins.World;
 
 import asciiPanel.AsciiPanel;
@@ -12,61 +15,69 @@ import asciiPanel.AsciiPanel;
 public class WorldScreen implements Screen {
 
     private World world;
-    private Goblin[] goblins;
+    private Goblin[][] goblins;
     String[] sortSteps;
+
+    final int ROW = 4;
+    final int COL = 4;
 
     public WorldScreen() {
         world = new World();
 
-        /*
-        bros = new Calabash[7];
+        // TODO: read color from img and set color of goblins
+        Goblin[][] goblins = new Goblin[ROW][];
+        for (int i = 0; i < ROW; i++) {
+            goblins[i] = new Goblin[COL];
+            for (int j = 0; j < COL; j++) {
+                int index = i * COL + j;
+                goblins[i][j] = new Goblin(new Color((index>>4)<<4, ((index>>2) & 0xf)<<4 , (index&0xf)<<4), i * COL + j, world);
+                world.put(goblins[i][j], 10 + 2 * i, 10 + 2 * j);
+            }
+        }
+        Random random = new Random();
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                int x = random.nextInt(ROW);
+                int y = random.nextInt(COL);
+                Goblin tmp = goblins[x][y];
+                goblins[x][y] = goblins[i][j];
+                goblins[i][j] = tmp;
+            }
+        }
+        random = null;
 
-        bros[3] = new Calabash(new Color(204, 0, 0), 1, world);
-        bros[5] = new Calabash(new Color(255, 165, 0), 2, world);
-        bros[1] = new Calabash(new Color(252, 233, 79), 3, world);
-        bros[0] = new Calabash(new Color(78, 154, 6), 4, world);
-        bros[4] = new Calabash(new Color(50, 175, 255), 5, world);
-        bros[6] = new Calabash(new Color(114, 159, 207), 6, world);
-        bros[2] = new Calabash(new Color(173, 127, 168), 7, world);
+        BubbleSorter<Goblin> sorter = new BubbleSorter<>();
+        //SelectSorter<Goblin> sorter = new SelectSorter<>();
 
-        world.put(bros[0], 10, 10);
-        world.put(bros[1], 12, 10);
-        world.put(bros[2], 14, 10);
-        world.put(bros[3], 16, 10);
-        world.put(bros[4], 18, 10);
-        world.put(bros[5], 20, 10);
-        world.put(bros[6], 22, 10);
+        Goblin[] arrayGoblins = new Goblin[ROW * COL];
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                arrayGoblins[i * COL + j] = goblins[i][j];
+            }
+        }
+        sorter.load(arrayGoblins);
+        sorter.sort();
 
-        BubbleSorter<Calabash> b = new BubbleSorter<>();
-        b.load(bros);
-        b.sort();
+        sortSteps = this.parsePlan(sorter.getPlan());
 
-        sortSteps = this.parsePlan(b.getPlan());
-        */
     }
 
     private String[] parsePlan(String plan) {
         return plan.split("\n");
     }
 
-    /*
-    private void execute(Calabash[] bros, String step) {
+    private void execute(Goblin[][] goblins, String step) {
         String[] couple = step.split("<->");
-        getBroByRank(bros, Integer.parseInt(couple[0])).swap(getBroByRank(bros, Integer.parseInt(couple[1])));
+        getGoblinByRanke(Integer.parseInt(couple[0])).swap(getGoblinByRanke(Integer.parseInt(couple[1])));
     }
 
-    private Calabash getBroByRank(Calabash[] bros, int rank) {
-        for (Calabash bro : bros) {
-            if (bro.getRank() == rank) {
-                return bro;
-            }
-        }
-        return null;
+    private Goblin getGoblinByRanke(int rank) {
+        return Goblin.getGoblinByRank(rank);
     }
 
     @Override
     public void displayOutput(AsciiPanel terminal) {
-
+        
         for (int x = 0; x < World.WIDTH; x++) {
             for (int y = 0; y < World.HEIGHT; y++) {
 
@@ -77,16 +88,16 @@ public class WorldScreen implements Screen {
     }
 
     int i = 0;
-
+    
     @Override
     public Screen respondToUserInput(KeyEvent key) {
 
         if (i < this.sortSteps.length) {
-            this.execute(bros, sortSteps[i]);
+            this.execute(goblins, sortSteps[i]);
             i++;
         }
 
         return this;
     }
-    */
+
 }

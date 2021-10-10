@@ -2,8 +2,8 @@ package com.ricky.goblins;
 
 public class World {
 
-    public static final int WIDTH = 40;
-    public static final int HEIGHT = 20;
+    public static final int WIDTH = 52;
+    public static final int HEIGHT = 52;
 
     private Tile<Thing>[][] tiles;
 

@@ -1,6 +1,6 @@
 package com.ricky.goblins;
 
-public class BubbleSorter<T extends Comparable<T>> implements Sorter<T> {
+public class SelectSorter<T extends Comparable<T>> implements Sorter<T> {
     private T[] a;
     
     @Override
@@ -20,15 +20,13 @@ public class BubbleSorter<T extends Comparable<T>> implements Sorter<T> {
 
     @Override
     public void sort() {
-        boolean sorted = false;
-        while (!sorted) {
-            sorted = true;
-            for (int i = 0; i < a.length - 1; i++) {
-                if (a[i].compareTo(a[i + 1]) > 0) {
-                    swap(i, i + 1);
-                    sorted = false;
-                }
-            }
+        for (int i = 0; i < a.length; i++) {
+            int mIdx = i;
+            for (int j = i; j < a.length; j++) 
+                if (a[j].compareTo(a[mIdx]) > 0) 
+                    mIdx = j;
+            if (mIdx != i)
+                swap(i, mIdx);
         }
     }
 
