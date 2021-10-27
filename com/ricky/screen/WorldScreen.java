@@ -2,13 +2,15 @@ package com.ricky.screen;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-
+import java.io.IOException;
 import java.util.Random;
 
 import com.ricky.goblins.BubbleSorter;
 import com.ricky.goblins.Goblin;
 import com.ricky.goblins.SelectSorter;
 import com.ricky.goblins.World;
+
+import com.ricky.utils.GetColor;
 
 import asciiPanel.AsciiPanel;
 
@@ -18,22 +20,22 @@ public class WorldScreen implements Screen {
     private Goblin[][] goblins;
     String[] sortSteps;
 
-    final int ROW = 4;
-    final int COL = 4;
+    final int ROW = 16;
+    final int COL = 16;
 
-    public WorldScreen() {
+    public WorldScreen() throws IOException{
         world = new World();
 
-        // TODO: read color from img and set color of goblins
+        int[][] colors = GetColor.getColor("./resources/c256.png", 16, 16);
         Goblin[][] goblins = new Goblin[ROW][];
         for (int i = 0; i < ROW; i++) {
             goblins[i] = new Goblin[COL];
             for (int j = 0; j < COL; j++) {
                 int index = i * COL + j;
-                goblins[i][j] = new Goblin(new Color((index>>4)<<4, ((index>>2) & 0xf)<<4 , (index&0xf)<<4), i * COL + j, world);
-                world.put(goblins[i][j], 10 + 2 * i, 10 + 2 * j);
+                goblins[i][j] = new Goblin(new Color(colors[index][0], colors[index][1], colors[index][2]), i * COL + j, world);
             }
         }
+        
         Random random = new Random();
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
@@ -45,9 +47,15 @@ public class WorldScreen implements Screen {
             }
         }
         random = null;
+        
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                world.put(goblins[i][j], 10 + 2 * i, 10 + 2 * j);
+            }
+        }
 
-        BubbleSorter<Goblin> sorter = new BubbleSorter<>();
-        //SelectSorter<Goblin> sorter = new SelectSorter<>();
+        //BubbleSorter<Goblin> sorter = new BubbleSorter<>();
+        SelectSorter<Goblin> sorter = new SelectSorter<>();
 
         Goblin[] arrayGoblins = new Goblin[ROW * COL];
         for (int i = 0; i < ROW; i++) {

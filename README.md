@@ -4,15 +4,14 @@
 
 ## 文件结构
 
-
-
-## 示例代码解读
-
-
-
-## 类设计
-
-
+```
+.
+├── Main.java
+├── README.md
+├── asciiPanel
+├── com
+└── resources
+```
 
 ## 运行结果
 
