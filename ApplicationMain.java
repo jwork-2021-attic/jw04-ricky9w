@@ -23,8 +23,9 @@ import javax.swing.JFrame;
 
 import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
+import screen.MazeScreen;
 import screen.Screen;
-import screen.StartScreen;
+import world.World;
 
 /**
  *
@@ -38,10 +39,10 @@ public class ApplicationMain extends JFrame implements KeyListener {
 
     public ApplicationMain() {
         super();
-        terminal = new AsciiPanel(80, 32, AsciiFont.TALRYTH_15_15);
+        terminal = new AsciiPanel(World.WIDTH, World.HEIGHT, AsciiFont.TALRYTH_15_15);
         add(terminal);
         pack();
-        screen = new StartScreen();
+        screen = new MazeScreen();
         addKeyListener(this);
         repaint();
     }
